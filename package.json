@@ -8,7 +8,7 @@
   "activationCommands": {
     "atom-workspace": "lizard-cyclomatic-complexity:toggle"
   },
-  "repository": "https://github.com/atom/lizard-cyclomatic-complexity",
+  "repository": "https://github.com/HansImmer/lizard-cyclomatic-complexity.git",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
