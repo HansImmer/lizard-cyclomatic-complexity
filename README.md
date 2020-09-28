@@ -2,7 +2,6 @@
 
 A short description of your package.
 
-Hi this is the package to execute lizard tooling in atom.
-This is a test.
+This package executes lizard tooling in atom.
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+For details about lizard tool and how to insatall it please refer to https://github.com/terryyin/lizard
