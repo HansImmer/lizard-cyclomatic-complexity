@@ -3,21 +3,27 @@
   "main": "./lib/lizard-cyclomatic-complexity",
   "version": "0.0.0",
   "description": "Excecutes lizard cyclomatic complexity tool",
-  "keywords": [
-  ],
+  "keywords": [],
   "repository": "https://github.com/HansImmer/lizard-cyclomatic-complexity.git",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
-  },
-
+  "dependencies": {},
   "providedServices": {
     "linter": {
       "versions": {
         "2.0.0": "provideLinter"
       }
     }
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jasmine": "^4.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
   }
 }

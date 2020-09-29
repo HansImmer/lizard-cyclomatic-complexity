@@ -1,73 +1,98 @@
 'use babel';
 
-import LizardCyclomaticComplexity from '../lib/lizard-cyclomatic-complexity';
+/* eslint semi: ["error", "always"] */
+/* eslint "comma-dangle": ["error", {
+        "arrays": "ignore",
+        "objects": "ignore",
+        "imports": "ignore",
+        "exports": "ignore",
+        "functions": "ignore"
+    }], */
 
-// Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
-//
-// To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
-// or `fdescribe`). Remove the `f` to unfocus the block.
+import * as path from 'path';
 
-describe('LizardCyclomaticComplexity', () => {
-  let workspaceElement, activationPromise;
+var goodPath = path.join(__dirname, 'files', 'good.');
+var badPath = path.join(__dirname, 'files', 'bad.');
+var emptyPath = path.join(__dirname, 'files', 'empty.');
 
-  beforeEach(() => {
-    workspaceElement = atom.views.getView(atom.workspace);
-    activationPromise = atom.packages.activatePackage('lizard-cyclomatic-complexity');
+const { lint } = require('../lib/lizard-cyclomatic-complexity.js').provideLinter();
+
+describe('The lizard provider for Linter', () => {
+  beforeEach(async () => {
+    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
   });
 
-  describe('when the lizard-cyclomatic-complexity:toggle event is triggered', () => {
-    it('hides and shows the modal panel', () => {
-      // Before the activation event the view is not on the DOM, and no panel
-      // has been created
-      expect(workspaceElement.querySelector('.lizard-cyclomatic-complexity')).not.toExist();
+  it('should be in the packages list', () => {
+    expect(atom.packages.isPackageLoaded('lizard-cyclomatic-complexity')).toBe(true);
+  });
 
-      // This is an activation event, triggering it will cause the package to be
-      // activated.
-      atom.commands.dispatch(workspaceElement, 'lizard-cyclomatic-complexity:toggle');
+  it('should be an active package', () => {
+    expect(atom.packages.isPackageActive('lizard-cyclomatic-complexity')).toBe(true);
+  });
+});
 
-      waitsForPromise(() => {
-        return activationPromise;
-      });
+describe('The lizard tool can handle python files', () => {
+  const goodPathPy = goodPath + 'py';
+  const badPathPy = badPath + 'py';
+  const emptyPathPy = emptyPath + 'py';
 
-      runs(() => {
-        expect(workspaceElement.querySelector('.lizard-cyclomatic-complexity')).toExist();
+  beforeEach(async () => {
+    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+  });
 
-        let lizardCyclomaticComplexityElement = workspaceElement.querySelector('.lizard-cyclomatic-complexity');
-        expect(lizardCyclomaticComplexityElement).toExist();
+  it('checks bad.py and reports the correct results', async () => {
+    const editor = await atom.workspace.open(badPathPy);
+    const messages = await lint(editor);
 
-        let lizardCyclomaticComplexityPanel = atom.workspace.panelForItem(lizardCyclomaticComplexityElement);
-        expect(lizardCyclomaticComplexityPanel.isVisible()).toBe(true);
-        atom.commands.dispatch(workspaceElement, 'lizard-cyclomatic-complexity:toggle');
-        expect(lizardCyclomaticComplexityPanel.isVisible()).toBe(false);
-      });
-    });
+    expect(messages.length).toBe(1);
 
-    it('hides and shows the view', () => {
-      // This test shows you an integration test testing at the view level.
+    expect(messages[0].severity).toBe('warning');
+    expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
+    expect(messages[0].location.file).toBe(badPathPy);
+    // expect(messages[0].location.position).toEqual([[0, 0], [0, 31]]);
+    expect(messages[0].url).toBe('');
+  });
 
-      // Attaching the workspaceElement to the DOM is required to allow the
-      // `toBeVisible()` matchers to work. Anything testing visibility or focus
-      // requires that the workspaceElement is on the DOM. Tests that attach the
-      // workspaceElement to the DOM are generally slower than those off DOM.
-      jasmine.attachToDOM(workspaceElement);
+  it('finds nothing wrong with an empty file', async () => {
+    const editor = await atom.workspace.open(emptyPathPy);
+    const messages = await lint(editor);
+    expect(messages).toBe(null);
+  });
 
-      expect(workspaceElement.querySelector('.lizard-cyclomatic-complexity')).not.toExist();
+  it('finds nothing wrong with a valid file', async () => {
+    const editor = await atom.workspace.open(goodPathPy);
+    const messages = await lint(editor);
+    expect(messages.length).toBe(0);
+  });
+});
 
-      // This is an activation event, triggering it causes the package to be
-      // activated.
-      atom.commands.dispatch(workspaceElement, 'lizard-cyclomatic-complexity:toggle');
+describe('The lizard tool can handle c files', () => {
+  const goodPathC = goodPath + 'c';
+  const badPathC = badPath + 'c';
+  const emptyPathC = emptyPath + 'c';
 
-      waitsForPromise(() => {
-        return activationPromise;
-      });
+  it('checks bad.c and reports the correct results', async () => {
+    const editor = await atom.workspace.open(badPathC);
+    const messages = await lint(editor);
 
-      runs(() => {
-        // Now we can test for view visibility
-        let lizardCyclomaticComplexityElement = workspaceElement.querySelector('.lizard-cyclomatic-complexity');
-        expect(lizardCyclomaticComplexityElement).toBeVisible();
-        atom.commands.dispatch(workspaceElement, 'lizard-cyclomatic-complexity:toggle');
-        expect(lizardCyclomaticComplexityElement).not.toBeVisible();
-      });
-    });
+    expect(messages.length).toBe(1);
+
+    expect(messages[0].severity).toBe('warning');
+    expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
+    expect(messages[0].location.file).toBe(badPathC);
+    // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
+    expect(messages[0].url).toBe('');
+  });
+
+  it('finds nothing wrong with an empty file', async () => {
+    const editor = await atom.workspace.open(emptyPathC);
+    const messages = await lint(editor);
+    expect(messages).toBe(null);
+  });
+
+  it('finds nothing wrong with a valid file', async () => {
+    const editor = await atom.workspace.open(goodPathC);
+    const messages = await lint(editor);
+    expect(messages.length).toBe(0);
   });
 });
