@@ -11,11 +11,48 @@
 
 import * as path from 'path';
 
-var goodPath = path.join(__dirname, 'files', 'good.');
-var badPath = path.join(__dirname, 'files', 'bad.');
-var emptyPath = path.join(__dirname, 'files', 'empty.');
-
 const { lint } = require('../lib/lizard-cyclomatic-complexity.js').provideLinter();
+const basePath = path.join(__dirname, 'files');
+
+function CheckFileExtension (basePath, fileEnding) {
+  describe('The lizard tool can handle c files', () => {
+    const locGoodPath = path.join(basePath, 'good.') + fileEnding;
+    const locBadPath = path.join(basePath, 'bad.') + fileEnding;
+    const locEmptyPath = path.join(basePath, 'empty.') + fileEnding;
+
+    console.log('locGoodPath' + locGoodPath);
+    console.log('locBadPath' + locBadPath);
+    console.log('locEmptyPath' + locEmptyPath);
+
+    beforeEach(async () => {
+      await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+    });
+
+    it('checks bad.' + fileEnding + ' and reports the correct results', async () => {
+      const editor = await atom.workspace.open(locBadPath);
+      const messages = await lint(editor);
+
+      expect(messages.length).toBe(1);
+      expect(messages[0].severity).toBe('warning');
+      expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
+      expect(messages[0].location.file).toBe(locBadPath);
+      // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
+      expect(messages[0].url).toBe('');
+    });
+
+    it('finds nothing wrong with an empty.' + fileEnding + ' file', async () => {
+      const editor = await atom.workspace.open(locEmptyPath);
+      const messages = await lint(editor);
+      expect(messages).toBe(null);
+    });
+
+    it('finds nothing wrong with good' + fileEnding + ' file', async () => {
+      const editor = await atom.workspace.open(locGoodPath);
+      const messages = await lint(editor);
+      expect(messages.length).toBe(0);
+    });
+  });
+};
 
 describe('The lizard provider for Linter', () => {
   beforeEach(async () => {
@@ -31,68 +68,5 @@ describe('The lizard provider for Linter', () => {
   });
 });
 
-describe('The lizard tool can handle python files', () => {
-  const goodPathPy = goodPath + 'py';
-  const badPathPy = badPath + 'py';
-  const emptyPathPy = emptyPath + 'py';
-
-  beforeEach(async () => {
-    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
-  });
-
-  it('checks bad.py and reports the correct results', async () => {
-    const editor = await atom.workspace.open(badPathPy);
-    const messages = await lint(editor);
-
-    expect(messages.length).toBe(1);
-
-    expect(messages[0].severity).toBe('warning');
-    expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
-    expect(messages[0].location.file).toBe(badPathPy);
-    // expect(messages[0].location.position).toEqual([[0, 0], [0, 31]]);
-    expect(messages[0].url).toBe('');
-  });
-
-  it('finds nothing wrong with an empty file', async () => {
-    const editor = await atom.workspace.open(emptyPathPy);
-    const messages = await lint(editor);
-    expect(messages).toBe(null);
-  });
-
-  it('finds nothing wrong with a valid file', async () => {
-    const editor = await atom.workspace.open(goodPathPy);
-    const messages = await lint(editor);
-    expect(messages.length).toBe(0);
-  });
-});
-
-describe('The lizard tool can handle c files', () => {
-  const goodPathC = goodPath + 'c';
-  const badPathC = badPath + 'c';
-  const emptyPathC = emptyPath + 'c';
-
-  it('checks bad.c and reports the correct results', async () => {
-    const editor = await atom.workspace.open(badPathC);
-    const messages = await lint(editor);
-
-    expect(messages.length).toBe(1);
-
-    expect(messages[0].severity).toBe('warning');
-    expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
-    expect(messages[0].location.file).toBe(badPathC);
-    // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
-    expect(messages[0].url).toBe('');
-  });
-
-  it('finds nothing wrong with an empty file', async () => {
-    const editor = await atom.workspace.open(emptyPathC);
-    const messages = await lint(editor);
-    expect(messages).toBe(null);
-  });
-
-  it('finds nothing wrong with a valid file', async () => {
-    const editor = await atom.workspace.open(goodPathC);
-    const messages = await lint(editor);
-    expect(messages.length).toBe(0);
-  });
-});
+CheckFileExtension(basePath, 'py');
+CheckFileExtension(basePath, 'c');
