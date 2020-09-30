@@ -14,11 +14,11 @@ import * as path from 'path';
 const { lint } = require('../lib/lizard-cyclomatic-complexity.js').provideLinter();
 const basePath = path.join(__dirname, 'files');
 
-function CheckFileExtension (basePath, fileEnding) {
-  describe('The lizard tool can handle' + fileEnding + ' files', () => {
-    const goodPath = path.join(basePath, 'good.') + fileEnding;
-    const badPath = path.join(basePath, 'bad.') + fileEnding;
-    const emptyPath = path.join(basePath, 'empty.') + fileEnding;
+function CheckFileExtension (basePath, language, fileEnding) {
+  describe('The lizard tool can handle' + language + ' files', () => {
+    const goodPath = path.join(basePath, language, 'good.') + fileEnding;
+    const badPath = path.join(basePath, language, 'bad.') + fileEnding;
+    const emptyPath = path.join(basePath, language, 'empty.') + fileEnding;
 
     beforeEach(async () => {
       await atom.packages.activatePackage('lizard-cyclomatic-complexity');
@@ -67,7 +67,12 @@ describe('The lizard provider for Linter', () => {
   });
 });
 
-CheckFileExtension(basePath, 'py');
-CheckFileExtension(basePath, 'c');
-CheckFileExtension(basePath, 'php');
-CheckFileExtension(basePath, 'rb');
+CheckFileExtension(basePath, 'c', 'c');
+CheckFileExtension(basePath, 'swift', 'swift');
+CheckFileExtension(basePath, 'python', 'py');
+CheckFileExtension(basePath, 'ruby', 'rb');
+CheckFileExtension(basePath, 'php', 'php');
+CheckFileExtension(basePath, 'GDScript', 'gd');
+CheckFileExtension(basePath, 'GoLang', 'go');
+CheckFileExtension(basePath, 'lua', 'lua');
+CheckFileExtension(basePath, 'rust', 'rs');
