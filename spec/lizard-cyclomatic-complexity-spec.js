@@ -22,6 +22,9 @@ function CheckFileExtension (basePath, fileEnding) {
 
     beforeEach(async () => {
       await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+
+      // set the value for cyclomatic complexity threshold very low in order to have smaller test files (e.g. bad.py)
+      atom.config.set('lizard-cyclomatic-complexity.thresholdCyclomaticComplexity', '2');
     });
 
     it('checks bad.' + fileEnding + ' and reports the correct results', async () => {

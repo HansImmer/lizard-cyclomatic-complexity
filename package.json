@@ -25,5 +25,25 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1"
+  },
+  "configSchema": {
+    "thresholdCyclomaticComplexity": {
+      "type": "integer",
+      "default": "15",
+      "description": "Threshold for cyclomatic complexity. Every cyclomatic complexity number above will be reported as warning",
+      "order": 1
+    },
+    "thresholdNumberOfParameters": {
+      "type": "integer",
+      "default": "10",
+      "description": "Threshold for maximum number of parameters. Every function with more parameters will be reported as warning",
+      "order": 1
+    },
+    "thresholdlinesOfCodeWithoutComments": {
+      "type": "integer",
+      "default": "1000",
+      "description": "Threshold for maximum number of lines of code in a function without comments. Every function with more lines of code will be reported as warning",
+      "order": 1
+    }
   }
 }
