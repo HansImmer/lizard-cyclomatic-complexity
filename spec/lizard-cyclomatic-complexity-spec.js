@@ -69,3 +69,5 @@ describe('The lizard provider for Linter', () => {
 
 CheckFileExtension(basePath, 'py');
 CheckFileExtension(basePath, 'c');
+CheckFileExtension(basePath, 'php');
+CheckFileExtension(basePath, 'rb');
