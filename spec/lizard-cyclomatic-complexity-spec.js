@@ -15,39 +15,35 @@ const { lint } = require('../lib/lizard-cyclomatic-complexity.js').provideLinter
 const basePath = path.join(__dirname, 'files');
 
 function CheckFileExtension (basePath, fileEnding) {
-  describe('The lizard tool can handle c files', () => {
-    const locGoodPath = path.join(basePath, 'good.') + fileEnding;
-    const locBadPath = path.join(basePath, 'bad.') + fileEnding;
-    const locEmptyPath = path.join(basePath, 'empty.') + fileEnding;
-
-    console.log('locGoodPath' + locGoodPath);
-    console.log('locBadPath' + locBadPath);
-    console.log('locEmptyPath' + locEmptyPath);
+  describe('The lizard tool can handle' + fileEnding + ' files', () => {
+    const goodPath = path.join(basePath, 'good.') + fileEnding;
+    const badPath = path.join(basePath, 'bad.') + fileEnding;
+    const emptyPath = path.join(basePath, 'empty.') + fileEnding;
 
     beforeEach(async () => {
       await atom.packages.activatePackage('lizard-cyclomatic-complexity');
     });
 
     it('checks bad.' + fileEnding + ' and reports the correct results', async () => {
-      const editor = await atom.workspace.open(locBadPath);
+      const editor = await atom.workspace.open(badPath);
       const messages = await lint(editor);
 
       expect(messages.length).toBe(1);
       expect(messages[0].severity).toBe('warning');
       expect(messages[0].excerpt).toBe('cyclomatic complexity too high for function bad_function');
-      expect(messages[0].location.file).toBe(locBadPath);
+      expect(messages[0].location.file).toBe(badPath);
       // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
       expect(messages[0].url).toBe('');
     });
 
     it('finds nothing wrong with an empty.' + fileEnding + ' file', async () => {
-      const editor = await atom.workspace.open(locEmptyPath);
+      const editor = await atom.workspace.open(emptyPath);
       const messages = await lint(editor);
       expect(messages).toBe(null);
     });
 
     it('finds nothing wrong with good' + fileEnding + ' file', async () => {
-      const editor = await atom.workspace.open(locGoodPath);
+      const editor = await atom.workspace.open(goodPath);
       const messages = await lint(editor);
       expect(messages.length).toBe(0);
     });
