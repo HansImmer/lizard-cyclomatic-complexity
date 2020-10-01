@@ -68,10 +68,17 @@ describe('The lizard provider for Linter', () => {
 });
 
 CheckFileExtension(basePath, 'c', 'c');
+CheckFileExtension(basePath, 'c', 'h');
+CheckFileExtension(basePath, 'cpp', 'cpp');
+CheckFileExtension(basePath, 'java', 'java');
+CheckFileExtension(basePath, 'CSharp', 'cs');
+CheckFileExtension(basePath, 'JavaScript', 'js');
+CheckFileExtension(basePath, 'ObjectiveC', 'm');
 CheckFileExtension(basePath, 'swift', 'swift');
 CheckFileExtension(basePath, 'python', 'py');
 CheckFileExtension(basePath, 'ruby', 'rb');
 CheckFileExtension(basePath, 'php', 'php');
+CheckFileExtension(basePath, 'scala', 'scala');
 CheckFileExtension(basePath, 'GDScript', 'gd');
 CheckFileExtension(basePath, 'GoLang', 'go');
 CheckFileExtension(basePath, 'lua', 'lua');
