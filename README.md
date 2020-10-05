@@ -2,6 +2,9 @@
 
 A short description of your package.
 
-This package executes lizard tooling in atom.
+This package executes lizard cyclomatic complexity tooling in atom.
 
-For details about lizard tool and how to insatall it please refer to https://github.com/terryyin/lizard
+This package is basically an plugin for [Linter](https://github.com/AtomLinter/Linter)
+
+The lizard tool is not part of this package.
+For details about lizard tool and how to install it please refer to https://github.com/terryyin/lizard
