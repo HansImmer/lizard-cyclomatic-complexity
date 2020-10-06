@@ -1,5 +1,6 @@
 """Module holding test class"""
 
+
 def too_many_parameters(par1, par2, par3, par4, par5, par6):
     """ Reports an entry which was done at the given date """
     print("par 1" + par1 + "par 2" + par2 + "par 3" + par3, "par 4" + par4
@@ -12,7 +13,7 @@ def exactly_number_of_parameters(par1, par2, par3, par4, par5):
     + "par 5" + par5)
 
 
-def too_long_function(par1, par2, par3, par4, par5):
+def too_long_function():
     """ Reports an entry which was done at the given date """
     print("1")
     print("2")
@@ -24,6 +25,7 @@ def too_long_function(par1, par2, par3, par4, par5):
     print("8")
     print("9")
     print("10")
+
 
 def exactly_long_function(par1, par2, par3, par4, par5):
     """ Reports an entry which was done at the given date """
