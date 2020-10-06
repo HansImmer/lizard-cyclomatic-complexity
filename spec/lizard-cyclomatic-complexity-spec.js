@@ -76,3 +76,48 @@ CheckFileExtension(basePath, 'GDScript', 'gd', 'bad_function');
 CheckFileExtension(basePath, 'GoLang', 'go', 'bad_function');
 CheckFileExtension(basePath, 'lua', 'lua', 'bad_function');
 CheckFileExtension(basePath, 'rust', 'rs', 'bad_function');
+
+fdescribe('The lizard tool analyzes functions', () => {
+  beforeEach(async () => {
+    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+
+    // set the value for cyclomatic complexity threshold very low in order
+    // to have smaller test files (e.g. bad.py)
+    atom.config.set('lizard-cyclomatic-complexity.thresholdCyclomaticComplexity', '2');
+    atom.config.set('lizard-cyclomatic-complexity.thresholdNumberOfParameters', '5');
+    atom.config.set('lizard-cyclomatic-complexity.thresholdlinesOfCodeWithoutComments', '10');
+    atom.config.set('lizard-cyclomatic-complexity.thresholdNumberOfTokens', '69');
+  });
+
+  it('analyzes the number of parameters', async () => {
+    const badPath = path.join(basePath, 'very_bad.py');
+    const editor = await atom.workspace.open(badPath);
+    const messages = await lint(editor);
+
+    expect(messages[0].severity).toBe('warning');
+    expect(messages[0].excerpt).toBe('Too many parameters (6/5) for function too_many_parameters');
+    expect(messages[0].location.file).toBe(badPath);
+    expect(messages[0].url).toBe('');
+  });
+  it('analyzes the number of code lines without comments', async () => {
+    const badPath = path.join(basePath, 'very_bad.py');
+    const editor = await atom.workspace.open(badPath);
+    const messages = await lint(editor);
+
+    expect(messages[1].severity).toBe('warning');
+    expect(messages[1].excerpt).toBe('Too many lines of code in function too_long_function');
+    expect(messages[1].location.file).toBe(badPath);
+    expect(messages[1].url).toBe('');
+  });
+
+  it('analyzes the number of tokens', async () => {
+    const badPath = path.join(basePath, 'very_bad.py');
+    const editor = await atom.workspace.open(badPath);
+    const messages = await lint(editor);
+
+    expect(messages[2].severity).toBe('warning');
+    expect(messages[2].excerpt).toBe('Too many tokens in function too_many_tokens');
+    expect(messages[2].location.file).toBe(badPath);
+    expect(messages[2].url).toBe('');
+  });
+});
