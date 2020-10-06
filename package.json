@@ -37,7 +37,7 @@
     },
     "thresholdNumberOfParameters": {
       "type": "integer",
-      "default": "10",
+      "default": "5",
       "description": "Threshold for maximum number of parameters. Every function with more parameters will be reported as warning",
       "order": 1
     },
