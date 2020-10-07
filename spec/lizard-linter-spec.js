@@ -96,7 +96,7 @@ describe('The lizard tool analyzes functions', () => {
     expect(messages[0].severity).toBe('warning');
     expect(messages[0].excerpt).toBe('Too many parameters (6>5) for function too_many_parameters');
     expect(messages[0].location.file).toBe(badPath);
-    // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
+    expect(messages[0].location.position).toEqual([[3, 0], [3, 60]]);
     expect(messages[0].url).toBe('');
   });
   it('analyzes the number of code lines without comments', async () => {
@@ -107,6 +107,7 @@ describe('The lizard tool analyzes functions', () => {
     expect(messages[1].severity).toBe('warning');
     expect(messages[1].excerpt).toBe('Too many lines of code (11>10) in function too_long_function');
     expect(messages[1].location.file).toBe(badPath);
+    expect(messages[1].location.position).toEqual([[15, 0], [15, 24]]);
     expect(messages[1].url).toBe('');
   });
 
@@ -118,6 +119,7 @@ describe('The lizard tool analyzes functions', () => {
     expect(messages[2].severity).toBe('warning');
     expect(messages[2].excerpt).toBe('Too many tokens (70>69) in function too_many_tokens');
     expect(messages[2].location.file).toBe(badPath);
+    expect(messages[2].location.position).toEqual([[42, 0], [42, 40]]);
     expect(messages[2].url).toBe('');
   });
 });
