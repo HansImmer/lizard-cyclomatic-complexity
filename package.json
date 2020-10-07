@@ -1,5 +1,5 @@
 {
-  "name": "lizard-cyclomatic-complexity",
+  "name": "lizard-linter",
   "main": "./lib/lizard-linter",
   "version": "0.0.0",
   "description": "Excecutes lizard cyclomatic complexity tool",
@@ -43,7 +43,7 @@
       "description": "Threshold for maximum number of parameters. Every function with more parameters will be reported as warning",
       "order": 1
     },
-    "thresholdlinesOfCodeWithoutComments": {
+    "thresholdLinesOfCodeWithoutComments": {
       "type": "integer",
       "default": "1000",
       "description": "Threshold for maximum number of lines of code in a function without comments. Every function with more lines of code will be reported as warning",

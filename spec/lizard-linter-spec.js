@@ -13,11 +13,11 @@ function CheckFileExtension(pathToTestFolder, language, fileEnding, badFunctionN
     const emptyPath = path.join(pathToTestFolder, language, 'empty.') + fileEnding;
 
     beforeEach(async () => {
-      await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+      await atom.packages.activatePackage('lizard-linter');
 
       // set the value for cyclomatic complexity threshold very low in order
       // to have smaller test files (e.g. bad.py)
-      atom.config.set('lizard-cyclomatic-complexity.thresholdCyclomaticComplexity', '2');
+      atom.config.set('lizard-linter.thresholdCyclomaticComplexity', '2');
     });
 
     it(`checks bad.${fileEnding} and reports the correct results`, async () => {
@@ -28,7 +28,6 @@ function CheckFileExtension(pathToTestFolder, language, fileEnding, badFunctionN
       expect(messages[0].severity).toBe('warning');
       expect(messages[0].excerpt).toBe(`cyclomatic complexity of 3 is too high for function ${badFunctionName}`);
       expect(messages[0].location.file).toBe(badPath);
-      // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
       expect(messages[0].url).toBe('');
     });
 
@@ -48,15 +47,15 @@ function CheckFileExtension(pathToTestFolder, language, fileEnding, badFunctionN
 
 describe('The lizard provider for Linter', () => {
   beforeEach(async () => {
-    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+    await atom.packages.activatePackage('lizard-linter');
   });
 
   it('should be in the packages list', () => {
-    expect(atom.packages.isPackageLoaded('lizard-cyclomatic-complexity')).toBe(true);
+    expect(atom.packages.isPackageLoaded('lizard-linter')).toBe(true);
   });
 
   it('should be an active package', () => {
-    expect(atom.packages.isPackageActive('lizard-cyclomatic-complexity')).toBe(true);
+    expect(atom.packages.isPackageActive('lizard-linter')).toBe(true);
   });
 });
 
@@ -79,14 +78,14 @@ CheckFileExtension(basePath, 'rust', 'rs', 'bad_function');
 
 describe('The lizard tool analyzes functions', () => {
   beforeEach(async () => {
-    await atom.packages.activatePackage('lizard-cyclomatic-complexity');
+    await atom.packages.activatePackage('lizard-linter');
 
     // set the value for cyclomatic complexity threshold very low in order
     // to have smaller test files (e.g. bad.py)
-    atom.config.set('lizard-cyclomatic-complexity.thresholdCyclomaticComplexity', '2');
-    atom.config.set('lizard-cyclomatic-complexity.thresholdNumberOfParameters', '5');
-    atom.config.set('lizard-cyclomatic-complexity.thresholdlinesOfCodeWithoutComments', '10');
-    atom.config.set('lizard-cyclomatic-complexity.thresholdNumberOfTokens', '69');
+    atom.config.set('lizard-linter.thresholdCyclomaticComplexity', '2');
+    atom.config.set('lizard-linter.thresholdNumberOfParameters', '5');
+    atom.config.set('lizard-linter.thresholdLinesOfCodeWithoutComments', '10');
+    atom.config.set('lizard-linter.thresholdNumberOfTokens', '69');
   });
 
   it('analyzes the number of parameters', async () => {
@@ -97,6 +96,7 @@ describe('The lizard tool analyzes functions', () => {
     expect(messages[0].severity).toBe('warning');
     expect(messages[0].excerpt).toBe('Too many parameters (6>5) for function too_many_parameters');
     expect(messages[0].location.file).toBe(badPath);
+    // expect(messages[0].location.position).toEqual([[0, 0], [0, 23]]);
     expect(messages[0].url).toBe('');
   });
   it('analyzes the number of code lines without comments', async () => {
