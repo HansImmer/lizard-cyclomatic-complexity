@@ -19,5 +19,8 @@
     ],
     "globals": {
       "atom" : true
+    },
+    "settings": {
+      "import/core-modules": ["atom"]
     }
 }
