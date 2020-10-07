@@ -1,6 +1,6 @@
 {
   "name": "lizard-cyclomatic-complexity",
-  "main": "./lib/lizard-cyclomatic-complexity",
+  "main": "./lib/lizard-linter",
   "version": "0.0.0",
   "description": "Excecutes lizard cyclomatic complexity tool",
   "keywords": [],

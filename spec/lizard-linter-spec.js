@@ -2,7 +2,7 @@
 
 import * as path from 'path';
 
-const { lint } = require('../lib/lizard-cyclomatic-complexity.js').provideLinter();
+const { lint } = require('../lib/lizard-linter.js').provideLinter();
 
 const basePath = path.join(__dirname, 'files');
 
@@ -77,7 +77,7 @@ CheckFileExtension(basePath, 'GoLang', 'go', 'bad_function');
 CheckFileExtension(basePath, 'lua', 'lua', 'bad_function');
 CheckFileExtension(basePath, 'rust', 'rs', 'bad_function');
 
-fdescribe('The lizard tool analyzes functions', () => {
+describe('The lizard tool analyzes functions', () => {
   beforeEach(async () => {
     await atom.packages.activatePackage('lizard-cyclomatic-complexity');
 
